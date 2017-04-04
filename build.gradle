@@ -1,0 +1,31 @@
+apply plugin: "java"
+apply plugin: "application"
+
+
+group = "edu.jsu.veteran_services"
+version = "0.0.1"
+description = "veteran services"
+
+mainClassName = "edu.jsu.veteran_services.Main"
+
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+dependencies {
+  compile "mysql:mysql-connector-java:5.1.16"
+  compile "org.slf4j:slf4j-api:1.7.21"
+  compile "junit:junit:4.12"
+}
+
+gradle.projectsEvaluated {
+  tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+  }
+}
