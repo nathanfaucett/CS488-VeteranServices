@@ -1,11 +1,27 @@
+buildscript {
+    dependencies {
+        classpath files(mkdir("build/classes/main"))
+    }
+}
+
+
 apply plugin: "java"
 apply plugin: "application"
+
+
+version = "0.0.1"
+jar {
+    manifest {
+        attributes "Implementation-Title": "Veteran Services",
+                   "Implementation-Version": version,
+                   "Main-Class": "edu.jsu.veteran_services.Main"
+    }
+}
 
 
 group = "edu.jsu.veteran_services"
 version = "0.0.1"
 description = "veteran services"
-
 mainClassName = "edu.jsu.veteran_services.Main"
 
 

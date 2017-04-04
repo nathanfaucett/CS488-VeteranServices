@@ -14,7 +14,7 @@ public class Sql {
     public Sql(String database, String username, String password) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connecting to database");
+            System.out.println("Connecting to database " + database);
             connection = DriverManager.getConnection(DB_URL + database, username, password);
         } catch(Exception se) {
             se.printStackTrace();
