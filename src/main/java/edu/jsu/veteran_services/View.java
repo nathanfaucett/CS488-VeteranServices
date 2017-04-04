@@ -12,8 +12,14 @@ public class View extends JFrame {
 
     public View() {
         super("Veteran Services");
-        setSize(512, 512);
+
+        setSize(960, 640);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JScrollPane scroll = new JScrollPane();
+        scroll.setViewportView(new StudentView());
+        add(scroll);
+
         setVisible(true);
     }
 }
