@@ -16,10 +16,40 @@ public class View extends JFrame {
         setSize(960, 640);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JScrollPane scroll = new JScrollPane();
-        scroll.setViewportView(new StudentView());
-        add(scroll);
+        final View _this = this;
+        State.get().addListener(new Runnable() {
+            @Override
+            public void run() {
+                _this.render();
+            }
+        });
+
+        render();
 
         setVisible(true);
+    }
+
+    public void clear() {
+        getContentPane().removeAll();
+    }
+
+    public void render() {
+        clear();
+
+        JScrollPane scroll = new JScrollPane();
+        State state = State.get();
+
+        switch (state.currentView) {
+            case "students":
+                scroll.setViewportView(new StudentsView());
+                break;
+            case "student_show":
+                scroll.setViewportView(new StudentShow(state.params.get("studentid")));
+                break;
+        }
+
+        add(scroll);
+
+        validate();
     }
 }

@@ -8,10 +8,10 @@ import javax.swing.*;
 import java.util.*;
 
 
-public class StudentView extends JPanel {
+public class StudentsView extends JPanel {
 
 
-    public StudentView() {
+    public StudentsView() {
         render();
     }
 
@@ -22,16 +22,18 @@ public class StudentView extends JPanel {
     public void render() {
         clear();
 
-        setLayout(new GridLayout(0,1));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        add(new StudentCreateView(this));
+        add(new StudentCreateView());
         add(new StudentListView());
     }
 
     public class StudentListView extends JPanel {
 
         public StudentListView() {
-            setLayout(new GridLayout(0,1));
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+            add(new JLabel("Students"));
 
             Students students = new Students(Sql.get());
             java.util.List<Student> studentList = students.all();
@@ -43,10 +45,23 @@ public class StudentView extends JPanel {
     }
     public class StudentInfoView extends JPanel {
 
-        public StudentInfoView(Student student) {
+        public StudentInfoView(final Student student) {
+            setLayout(new FlowLayout());
+
             add(new JLabel("Id: " + student.studentid));
             add(new JLabel("Name: " + student.firstname + " " + student.lastname));
             add(new JLabel("Email: " + student.email));
+
+            JButton button = new JButton("View Student");
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    State state = State.get();
+                    state.currentView = "student_show";
+                    state.params.put("studentid", student.studentid);
+                    state.update();
+                }
+            });
+            add(button);
         }
     }
 
@@ -77,7 +92,7 @@ public class StudentView extends JPanel {
         private Map<String, JTextField> textFields = new HashMap<>();
         private Map<String, JCheckBox> checkboxes = new HashMap<>();
 
-        public StudentCreateView(final StudentView parent) {
+        public StudentCreateView() {
             super(new GridLayout(0, 2));
 
             for (int i = 0; i < textFieldNames.length; i++) {
@@ -103,8 +118,6 @@ public class StudentView extends JPanel {
             }
 
             JButton button = new JButton("Create Student");
-            final StudentCreateView studentCreateView = this;
-
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
@@ -127,7 +140,7 @@ public class StudentView extends JPanel {
                         ps.executeUpdate();
                         ps.close();
 
-                        parent.render();
+                        State.get().update();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
