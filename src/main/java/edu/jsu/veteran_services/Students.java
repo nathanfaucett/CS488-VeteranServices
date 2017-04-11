@@ -43,6 +43,38 @@ public class Students {
         return null;
     }
 
+    public Student showEmail(String email) {
+        try {
+            Sql.Result result = sql.query("SELECT * FROM student WHERE email = " + email);
+
+            while (result.set.next()) {
+                return new Student(result.set);
+            }
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<Student> findRepeating(boolean repeating) {
+        List<Student> students = new ArrayList<>();
+        
+        try {
+            Sql.Result result = sql.query("SELECT * FROM student WHERE repeating = " + (repeating ? "true" : "false"));
+
+            while (result.set.next()) {
+                students.add(new Student(result.set));
+            }
+
+            return students;
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return students;
+    }
+
     public PreparedStatement create() {
         return sql.prepare(
             "INSERT INTO student ("+
